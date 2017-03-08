@@ -139,5 +139,5 @@ int main(void) {
  */
   FILE *f = fopen("./serialized.txt","r");
   struct Node *n = deserialize(f);
-  return isWord(n,"cattt");
+  return isWord(n,"book");
 }
