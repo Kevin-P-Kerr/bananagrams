@@ -1,12 +1,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 struct Node  {
   char c;
   struct Node *h; // horizontal traversal
   struct Node *v; // vertical traversal
 };
+
+char * serialize(struct Node *dict) {
+  /*
+   *
+   */
+}
+
+int getNext(FILE *f) {
+  int c;
+  while (isWhite((c=fgetc(f)))) {
+    continue;
+  }
+  return c;
+}
+
+int isWhite(int c) {
+  if (c == ' ' || c == '\t' || c == '\n') {
+    return 1;
+  }
+  return 0;
+}
+
+struct Node *parse(struct Node* n, FILE *f) {
+  int c;
+  struct Node *base = n;
+  // a b (c d e))
+  while ((c = getNext(f)) != ')') {
+    if (isalpha(c)) {
+      n->c = c;
+      n->h = malloc(sizeof(struct Node));
+      n = n->h;
+    }
+    if (c == '(') {
+      struct Node *v = malloc(sizeof(struct Node));
+      n->v = v;
+      parse(v,f);
+    }
+  }
+  if (c != ')') {
+    return NULL;
+  }
+  return base;
+}
+
+
+struct Node *deserialize(FILE *f) {
+  int c; 
+  struct Node *base = malloc(sizeof(struct Node));
+  // (a (b (c d) c...) b)
+  while ((c = getNext(f)) != EOF) {
+    if ((c == '(')) {
+      base->v = malloc(sizeof(struct Node));
+      parse(base->v,FILE);
+    }
+  }
+  return base->v;
+}
+
+
 
 struct Node* initNode (char c) {
   struct Node *n = malloc(sizeof(struct Node));
@@ -72,5 +132,5 @@ int isWord(struct Node *dict,char *str) {
 
 int main(void) {
   struct Node*n = initDict();
-  return isWord(n,"catzz");
+  return isWord(n,"wingspaan");
 }
