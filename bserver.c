@@ -30,50 +30,55 @@ int isWhite(int c) {
   return 0;
 }
 
-//static int numcalls_debug =0;
 
-struct Node* initNode (char c) {
+struct Node* initBlankNode () { 
   struct Node *n = malloc(sizeof(struct Node));
-  n->c = c;
   n->h = NULL;
   n->v = NULL;
+  return n;
 }
 
-struct Node *parse(struct Node* n, FILE *f) {
+struct Node* initNode (char c) {
+  struct Node *n = initBlankNode();
+  n->c = c;
+  return n;
+}
+
+struct Node *parse(FILE *f) {
   int c;
-  struct Node *base = n;
+  struct Node *base = initBlankNode();
+  struct Node *n = base;
   // a b (c d e))
+  // c (a (t))
   while ((c = getNext(f)) != ')') {
-    //fprintf(stderr, "%c : %d\n", c,numcalls_debug++); 
     if (isalpha(c)) {
-      n = initNode((char)c);
-      n->h = malloc(sizeof(struct Node));
+      n->h = initBlankNode();
       n = n->h;
+      n->c = c;
     }
-    if (c == '(') {
-      struct Node *v = malloc(sizeof(struct Node));
-      n->v = v;
-      parse(v,f);
+    else if (c == '(') {
+      n->v = parse(f);
     }
   }
   if (c != ')') {
     return NULL;
   }
-  return base;
+  return base->h;
 }
 
 struct Node *deserialize(FILE *f) {
   int c; 
-  struct Node *base = malloc(sizeof(struct Node));
   //(a b c)
   // a b c)
   fgetc(f);
-  parse(base,f);
-  return base;
+  return parse(f);
 }
 
 // look up horizontally or fail
 struct Node* lookup(struct Node* n, char c) {
+  if (n == NULL) {
+    return NULL;
+  }
   while (n->c != c) {
     if (n->h == NULL) {
       return NULL;
@@ -98,7 +103,7 @@ struct Node *lookupOrAdd(struct Node*n, char c) {
 
 struct Node* initDict() {
   FILE *f = fopen("/usr/share/dict/american-english","r");
-  struct Node *base = initNode('a');
+  struct Node *base =  initBlankNode();
   int c;
   while ((c = fgetc(f)) != EOF) {
     struct Node *head = lookupOrAdd(base,c);
@@ -128,9 +133,11 @@ int isWord(struct Node *dict,char *str) {
 
 
 int main(void) {
-  //struct Node*n = initDict();
-  //return isWord(n,"wingspaan");
+  /*
+  struct Node*n = initDict();
+  return isWord(n,"wingspan");
+ */
   FILE *f = fopen("./serialized.txt","r");
   struct Node *n = deserialize(f);
-  return isWord(n,"cat");
+  return isWord(n,"cattt");
 }
