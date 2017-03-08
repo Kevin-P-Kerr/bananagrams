@@ -35,8 +35,12 @@ struct Str*recurSerialize(struct Str *str, struct Node *dict) {
   }
   while (dict->h != NULL) {
     dict = dict->h;
-    recurSerialize(str,dict);
+    addChar(str,dict->c);
+    if (dict->v != NULL) {
+      recurSerialize(str,dict->v);
+    }
   }
+  addChar(str,')');
   return str;
 }
 
@@ -168,5 +172,7 @@ int main(void) {
  */
   FILE *f = fopen("./serialized.txt","r");
   struct Node *n = deserialize(f);
+  struct Str *s = serialize(n);
+  fprintf(stderr,"%s\n", s->c);
   return isWord(n,"book");
 }
