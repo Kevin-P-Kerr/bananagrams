@@ -9,10 +9,39 @@ struct Node  {
   struct Node *v; // vertical traversal
 };
 
-char * serialize(struct Node *dict) {
-  /*
-   *
-   */
+struct Str {
+  char *c;
+  int len;
+};
+
+struct Str *init() {
+  struct Str *s = malloc(sizeof(struct Str));
+  s->c = malloc(sizeof(char));
+  s->len = 1;
+  return s;
+}
+
+void addChar(struct Str *str, char c) {
+  str->c[str->len-1] = c;
+  str->len++;
+  str->c = realloc(str->c, sizeof(char)*str->len);
+};
+
+struct Str*recurSerialize(struct Str *str, struct Node *dict) {
+  addChar(str,'(');
+  addChar(str,dict->c);
+  if (dict->v != NULL) {
+    recurSerialize(str,dict->v);
+  }
+  while (dict->h != NULL) {
+    dict = dict->h;
+    recurSerialize(str,dict);
+  }
+  return str;
+}
+
+struct Str * serialize(struct Node *dict) {
+  return recurSerialize(init(),dict);
 }
 
 int getNext(FILE *f) {
