@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -29,6 +30,9 @@ struct Str*recurSerialize(struct Str *str, struct Node *dict) {
   while (dict->h != NULL) {
     dict = dict->h;
     addChar(str,dict->c);
+    if (dict->isWord) {
+      addChar(str,'$');
+    }
     if (dict->v != NULL) {
       recurSerialize(str,dict->v);
     }
@@ -41,6 +45,13 @@ struct Str * serialize(struct Node *dict) {
   return recurSerialize(init(),dict);
 }
 
+int isWhite(int c) {
+  if (c == ' ' || c == '\t' || c == '\n') {
+    return 1;
+  }
+  return 0;
+}
+
 int getNext(FILE *f) {
   int c;
   while (isWhite((c=fgetc(f)))) {
@@ -49,18 +60,11 @@ int getNext(FILE *f) {
   return c;
 }
 
-int isWhite(int c) {
-  if (c == ' ' || c == '\t' || c == '\n') {
-    return 1;
-  }
-  return 0;
-}
-
-
 struct Node* initBlankNode () { 
   struct Node *n = malloc(sizeof(struct Node));
   n->h = NULL;
   n->v = NULL;
+  n->isWord = 0;
   return n;
 }
 
@@ -81,6 +85,9 @@ struct Node *parse(FILE *f) {
       n->h = initBlankNode();
       n = n->h;
       n->c = c;
+    }
+    else if (c == '$') {
+      n->isWord = 1;
     }
     else if (c == '(') {
       n->v = parse(f);
@@ -136,11 +143,13 @@ struct Node* initStandardDict() {
     while ((c = fgetc(f)) != '\n') {
       if (head->v == NULL) {
         head->v = initNode(c);
+        head = head->v;
       }
       else {
         head = lookupOrAdd(head->v, c);
       }
     }
+    head->isWord = 1;
   }
   return base;
 }
@@ -148,11 +157,15 @@ struct Node* initStandardDict() {
 int isWord(struct Node *dict,char *str) {
   int s = strlen(str);
   int i,ii;
+  struct Node *b = malloc(sizeof(struct Node));
+  b->v = dict;
+  dict=  b;
   for (i=0, ii=s; i<ii; i++) {
+    dict  = dict->v;
     if ((dict = lookup(dict, str[i])) == NULL) {
       return 0;
     }
-    dict  = dict->v;
   }
-  return 1;
+  fprintf(stderr,"%c: %s\n",dict->c, str);
+  return dict->isWord;
 }

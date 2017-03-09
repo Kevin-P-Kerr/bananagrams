@@ -3,6 +3,7 @@ struct Node  {
   char c;
   struct Node *h; // horizontal traversal
   struct Node *v; // vertical traversal
+  int isWord;
 };
 
 struct Str {
