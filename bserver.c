@@ -2,17 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "dict.h"
 
-struct Node  {
-  char c;
-  struct Node *h; // horizontal traversal
-  struct Node *v; // vertical traversal
-};
-
-struct Str {
-  char *c;
-  int len;
-};
 
 struct Str *init() {
   struct Str *s = malloc(sizeof(struct Str));
@@ -138,7 +129,7 @@ struct Node *lookupOrAdd(struct Node*n, char c) {
   return n->h;
 }
 
-struct Node* initDict() {
+struct Node* initStandardDict() {
   FILE *f = fopen("/usr/share/dict/american-english","r");
   struct Node *base =  initBlankNode();
   int c;
