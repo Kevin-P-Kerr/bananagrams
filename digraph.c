@@ -12,8 +12,10 @@ struct Str *init() {
 }
 
 void addChar(struct Str *str, char c) {
-  //fprintf(stderr,"%c: %d\n",c,isalpha(c));
-  if (!isalpha(c) && (c != ')' && c != '(')) {
+  if (!isalpha(c) && (c != ')' && c != '(') && c != '$') {
+    if (DEBUG) {
+      fprintf(stderr,"warning: illegal char in string: %c\n", c);
+    }
     return;
   }
   str->c[str->len-1] = c;
@@ -21,18 +23,22 @@ void addChar(struct Str *str, char c) {
   str->c = realloc(str->c, sizeof(char)*str->len);
 };
 
+void addNodeChar(struct Str *str, struct Node *n) {
+  addChar(str,n->c);
+  if (n->isWord) {
+    addChar(str,'$');
+  }
+};
+
 struct Str*recurSerialize(struct Str *str, struct Node *dict) {
   addChar(str,'(');
-  addChar(str,dict->c);
+  addNodeChar(str,dict);
   if (dict->v != NULL) {
     recurSerialize(str,dict->v);
   }
   while (dict->h != NULL) {
     dict = dict->h;
-    addChar(str,dict->c);
-    if (dict->isWord) {
-      addChar(str,'$');
-    }
+    addNodeChar(str,dict);
     if (dict->v != NULL) {
       recurSerialize(str,dict->v);
     }
@@ -166,6 +172,5 @@ int isWord(struct Node *dict,char *str) {
       return 0;
     }
   }
-  fprintf(stderr,"%c: %s\n",dict->c, str);
   return dict->isWord;
 }

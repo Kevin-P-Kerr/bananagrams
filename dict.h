@@ -1,3 +1,5 @@
+// macros
+#define DEBUG 0
 // dictionary structures
 struct Node  {
   char c;
