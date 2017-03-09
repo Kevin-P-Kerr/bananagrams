@@ -22,6 +22,10 @@ struct Str *init() {
 }
 
 void addChar(struct Str *str, char c) {
+  //fprintf(stderr,"%c: %d\n",c,isalpha(c));
+  if (!isalpha(c) && (c != ')' && c != '(')) {
+    return;
+  }
   str->c[str->len-1] = c;
   str->len++;
   str->c = realloc(str->c, sizeof(char)*str->len);
@@ -166,13 +170,12 @@ int isWord(struct Node *dict,char *str) {
 
 
 int main(void) {
-  /*
-  struct Node*n = initDict();
-  return isWord(n,"wingspan");
- */
-  FILE *f = fopen("./serialized.txt","r");
+  //struct Node*n = initDict();
+  FILE *f = fopen("./dictionary.sx","r");
   struct Node *n = deserialize(f);
+  /*
   struct Str *s = serialize(n);
   fprintf(stderr,"%s\n", s->c);
-  return isWord(n,"book");
+  */
+  return isWord(n,"AOL");
 }
