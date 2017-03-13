@@ -70,6 +70,8 @@ struct Node* initBlankNode () {
   struct Node *n = malloc(sizeof(struct Node));
   n->h = NULL;
   n->v = NULL;
+  n->r = NULL;
+  n->u = NULL;
   n->isWord = 0;
   return n;
 }

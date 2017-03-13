@@ -3,8 +3,10 @@
 // dictionary structures
 struct Node  {
   char c;
-  struct Node *h; // horizontal traversal
-  struct Node *v; // vertical traversal
+  struct Node *h; // horizontal (rightward) traversal
+  struct Node *l; // horizontal (leftward) traversal
+  struct Node *v; // vertical (downward) traversal
+  struct Node *u; // vertical (upward) traversal
   int isWord;
 };
 
