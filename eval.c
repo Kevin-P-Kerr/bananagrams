@@ -26,8 +26,8 @@ void walkVertical(struct Node *g, struct StrContainer *strContainer) {
   while (g->u != NULL) {
     g = g->u;
   }
-  struct Str * s =  malloc(sizeof(struct Node));
-  while (g != NULL) {
+  struct Str * s =  initStr(); 
+    while (g != NULL) {
     addChar(s,g->c);
     if (g != initNodeAddr) {
       if (g->h != NULL || g->l != NULL) {
@@ -56,7 +56,7 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
   while (g->l != NULL) {
     g = g->l;
   }
-  struct Str * s =  malloc(sizeof(struct Node));
+  struct Str * s = initStr(); 
   while (g!= NULL) {
     addChar(s,g->c);
     if (g != initNodeAddr) {
@@ -70,8 +70,7 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
 };
 
 int eval(struct Node *g) {
- struct Str *s  = walkHorizontal(g);
- struct Str *v  = walkVertical(g);
+  struct StrContainer sc =  initStrContainer();
 };
 
 
