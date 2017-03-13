@@ -30,7 +30,9 @@ struct StrContainer *walk (struct Node *g) {
   return s;
 };
 
-void walkHorizontal(struct Node *g, struct StrContainer *s) {
+void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
+  struct Node *initNodeAddr = g;
+  // walk as far left as possible
   struct Str * s =  malloc(sizeof(struct Node));
   while (g!= NULL) {
     addChar(s,g->c);
@@ -42,6 +44,7 @@ void walkHorizontal(struct Node *g, struct StrContainer *s) {
     }
     g = g->h;
   }
+  addStr(s,strContainer);
 };
 
 int eval(struct Node *g) {
