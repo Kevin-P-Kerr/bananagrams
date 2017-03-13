@@ -19,6 +19,26 @@ void addStr(struct Str *s, struct StrContainer *sc) {
   sc->l = realloc(sc->l,sizeof(struct Str)*sc->size);
 };
 
+void walkVertical(struct Node *g, struct StrContainer *strContainer) {
+  // remember where we started from
+  struct Node *initNodeAddr = g;
+  // walk as far up as possible
+  while (g->u != NULL) {
+    g = g->u;
+  }
+  struct Str * s =  malloc(sizeof(struct Node));
+  while (g != NULL) {
+    addChar(s,g->c);
+    if (g != initNodeAddr) {
+      if (g->h != NULL || g->l != NULL) {
+        walkHorizontal(g,strContainer);
+      }
+    }
+    g = g->v;
+  }
+  addStr(s,strContainer);
+};
+
 struct StrContainer *walk (struct Node *g) {
   struct StrContainer *s = initStrContainer();
   if (g->h != NULL) {
@@ -33,14 +53,16 @@ struct StrContainer *walk (struct Node *g) {
 void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
   struct Node *initNodeAddr = g;
   // walk as far left as possible
+  while (g->l != NULL) {
+    g = g->l;
+  }
   struct Str * s =  malloc(sizeof(struct Node));
   while (g!= NULL) {
     addChar(s,g->c);
-    if (g->up != NULL) {
-      walkVertical(g,s);
-    }
-    if (g->down != NULL) {
-      walkVertical(g,s);
+    if (g != initNodeAddr) {
+      if (g->u != NULL || g->v != NULL) {
+        walkVertical(g,s);
+      }
     }
     g = g->h;
   }
