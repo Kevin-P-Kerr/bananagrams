@@ -15,7 +15,7 @@ struct Str {
   int len;
 };
 // function prototypes
-struct Str *init (void);
+struct Str *initStr (void);
 
 void addChar(struct Str *str, char c);
 

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "dict.h"
 
@@ -19,6 +20,9 @@ void addStr(struct Str *s, struct StrContainer *sc) {
   sc->l = realloc(sc->l,sizeof(struct Str)*sc->size);
 };
 
+// define prototype for mutual recursion
+void walkHorizontal(struct Node *g, struct StrContainer *s);
+
 void walkVertical(struct Node *g, struct StrContainer *strContainer) {
   // remember where we started from
   struct Node *initNodeAddr = g;
@@ -26,16 +30,16 @@ void walkVertical(struct Node *g, struct StrContainer *strContainer) {
   while (g->u != NULL) {
     g = g->u;
   }
-  struct Str * s =  initStr(); 
-    while (g != NULL) {
+  struct Str *s =  initStr(); 
+  while (g != NULL) {
     addChar(s,g->c);
     if (g != initNodeAddr) {
       if (g->h != NULL || g->l != NULL) {
         walkHorizontal(g,strContainer);
       }
     }
-    g = g->v;
   }
+  g = g->v;
   addStr(s,strContainer);
 };
 
@@ -45,7 +49,7 @@ struct StrContainer *walk (struct Node *g) {
     walkHorizontal(g,s);
   }
   else {
-    walkVertically(g,s);
+    walkVertical(g,s);
   }
   return s;
 };
@@ -61,7 +65,7 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
     addChar(s,g->c);
     if (g != initNodeAddr) {
       if (g->u != NULL || g->v != NULL) {
-        walkVertical(g,s);
+        walkVertical(g,strContainer);
       }
     }
     g = g->h;
@@ -74,14 +78,13 @@ int eval(struct Node *g, struct Node *dict) {
   int i,ii;
   for (i=0,ii=s->size;i<ii;i++) {
     struct Str *w = &s->l[i];
-    if (!isWord(w)) {
+    if (!isWord(dict,w->c)) {
       return 0;
     }
   }
   return 1;
 };
 
-int correct(struct Node *g) {
-  fixup(g);
-  return eval(g);
+int correct(struct Node *g, struct Node *dict) {
+  return eval(g, dict);
 };

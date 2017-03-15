@@ -108,7 +108,6 @@ struct Node *parse(FILE *f) {
 }
 
 struct Node *deserialize(FILE *f) {
-  int c; 
   //(a b c)
   // a b c)
   fgetc(f);
