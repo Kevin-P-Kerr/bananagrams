@@ -48,7 +48,7 @@ struct Str*recurSerialize(struct Str *str, struct Node *dict) {
 }
 
 struct Str * serialize(struct Node *dict) {
-  return recurSerialize(init(),dict);
+  return recurSerialize(initStr(),dict);
 }
 
 int isWhite(int c) {
@@ -70,7 +70,7 @@ struct Node* initBlankNode () {
   struct Node *n = malloc(sizeof(struct Node));
   n->h = NULL;
   n->v = NULL;
-  n->r = NULL;
+  n->l = NULL;
   n->u = NULL;
   n->isWord = 0;
   return n;
