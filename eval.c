@@ -69,10 +69,17 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
   addStr(s,strContainer);
 };
 
-int eval(struct Node *g) {
-  struct StrContainer sc =  initStrContainer();
+int eval(struct Node *g, struct Node *dict) {
+  struct StrContainer *s = walk(g);
+  int i,ii;
+  for (i=0,ii=s->size;i<ii;i++) {
+    struct Str *w = &s->l[i];
+    if (!isWord(w)) {
+      return 0;
+    }
+  }
+  return 1;
 };
-
 
 int correct(struct Node *g) {
   fixup(g);
