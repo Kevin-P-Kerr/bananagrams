@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "dict.h"
 
-struct Str *init() {
+struct Str *initStr() {
   struct Str *s = malloc(sizeof(struct Str));
   s->c = malloc(sizeof(char));
   s->len = 1;
