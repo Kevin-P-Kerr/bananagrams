@@ -17,7 +17,7 @@ char *getStr(struct Str *str) {
 };
 
 int isValidChar(char c) { 
-  return !(c!='\0' && c!='#' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
+  return !(c!='\0' && c!='[' && c!=']' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
 };
 
 void addChar(struct Str *str, char c) {
@@ -47,9 +47,9 @@ struct Str*recurSerialize(struct Str *str, struct Node *dict) {
     addChar(str,'}');
   }
   if (dict->l != NULL) {
-    addChar(str,'#');
+    addChar(str,'[');
     recurSerialize(str,dict->l);
-    addChar(str,'#');
+    addChar(str,']');
   }
   if (dict->v != NULL) {
     addChar(str,'(');
@@ -112,6 +112,9 @@ struct Node *parse(FILE *f, char peek) {
   if (peek == '}') {
     return NULL;
   }
+  if (peek == ']') {
+    return NULL;
+  }
   if (peek == '$') {
     n->isWord = 1;
     peek = getNext(f);
@@ -129,13 +132,14 @@ struct Node *parse(FILE *f, char peek) {
     n->u = parse(f,getNext(f));
     peek = getNext(f);
   }
-  if (peek == '#') {
+  if (peek == '[') {
     n->l = parse(f,getNext(f));
     peek = getNext(f);
   }
   if (isalpha(peek) || peek == '$') {
     n->h = parse(f,peek);
-  }
+  } 
+  fprintf(stderr,"hi:%c\n",peek);
   return base;
 };
 
