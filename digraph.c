@@ -130,7 +130,8 @@ struct Node *parse(FILE *f, char peek) {
     peek = getNext(f);
   }
   if (peek == '#') {
-    
+    n->l = parse(f,getNext(f));
+    peek = getNext(f);
   }
   if (isalpha(peek) || peek == '$') {
     n->h = parse(f,peek);
