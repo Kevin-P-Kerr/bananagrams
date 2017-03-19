@@ -11,8 +11,12 @@ struct Str *initStr() {
   return s;
 }
 
+int isValidChar(char c) { 
+  return !(c!='#' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
+};
+
 void addChar(struct Str *str, char c) {
-  if (!isalpha(c) && (c != ')' && c != '(') && c != '$') {
+  if (!isalpha(c) && !isValidChar(c)){
     if (DEBUG) {
       fprintf(stderr,"warning: illegal char in string: %c\n", c);
     }
@@ -24,10 +28,10 @@ void addChar(struct Str *str, char c) {
 };
 
 void addNodeChar(struct Str *str, struct Node *n) {
-  addChar(str,n->c);
   if (n->isWord) {
     addChar(str,'$');
   }
+  addChar(str,n->c);
 };
 
 struct Str*recurSerialize(struct Str *str, struct Node *dict) {
