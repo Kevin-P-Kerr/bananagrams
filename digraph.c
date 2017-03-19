@@ -57,7 +57,11 @@ struct Str*recurSerialize(struct Str *str, struct Node *dict) {
 }
 
 struct Str * serialize(struct Node *dict) {
-  return recurSerialize(initStr(),dict);
+  struct Str *s = initStr();
+  addChar(s,'(');
+  recurSerialize(s,dict);
+  addChar(s,')');
+  return s;
 }
 
 int isWhite(int c) {
