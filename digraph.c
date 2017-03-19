@@ -11,8 +11,13 @@ struct Str *initStr() {
   return s;
 }
 
+char *getStr(struct Str *str) {
+  addChar(str,'\0');
+  return str->c;
+};
+
 int isValidChar(char c) { 
-  return !(c!='#' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
+  return !(c!='\0' && c!='#' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
 };
 
 void addChar(struct Str *str, char c) {

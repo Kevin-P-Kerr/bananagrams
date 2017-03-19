@@ -33,4 +33,6 @@ struct Node *lookupOrAdd(struct Node *n, char c);
 
 struct Node* initStandardDict(void);
 
+char *getStr(struct Str *str);
+
 int isWord(struct Node *dict, char *str);
