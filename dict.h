@@ -23,7 +23,7 @@ struct Str *recurSerialize(struct Str *str, struct Node* dict);
 
 struct Str *serialize(struct Node *dict);
 
-struct Node *parse(FILE *f);
+struct Node *parse(FILE *f, char peek);
 
 struct Node *deserialize(FILE *f);
 

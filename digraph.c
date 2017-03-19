@@ -95,36 +95,38 @@ struct Node* initNode (char c) {
   return n;
 }
 
-struct Node *parse(FILE *f) {
-  int c;
+struct Node *parse(FILE *f, char peek) {
   struct Node *base = initBlankNode();
   struct Node *n = base;
   // a b (c d e))
   // c (a (t))
-  while ((c = getNext(f)) != ')') {
-    if (isalpha(c)) {
-      n->h = initBlankNode();
-      n = n->h;
-      n->c = c;
-    }
-    else if (c == '$') {
-      n->isWord = 1;
-    }
-    else if (c == '(') {
-      n->v = parse(f);
-    }
-  }
-  if (c != ')') {
+  if (peek == ')') {
     return NULL;
   }
-  return base->h;
-}
+  if (peek == '$') {
+    n->isWord = 1;
+    peek = getNext(f);
+  }
+  if (isalpha(peek)) {
+    n->c = peek;
+    peek = getNext(f);
+  }
+  // set up next node
+  if (peek == '(') {
+    n->v = parse(f,getNext(f));
+    peek = getNext(f);
+  }
+  if (isalpha(peek) || peek == '$') {
+    n->h = parse(f,peek);
+  }
+  return base;
+};
 
 struct Node *deserialize(FILE *f) {
   //(a b c)
   // a b c)
   fgetc(f);
-  return parse(f);
+  return parse(f,getNext(f));
 }
 
 // look up horizontally or fail
