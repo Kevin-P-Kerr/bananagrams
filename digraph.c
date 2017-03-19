@@ -44,6 +44,7 @@ struct Str*recurSerialize(struct Str *str, struct Node *dict) {
   if (dict->l != NULL) {
     addChar(str,'#');
     recurSerialize(str,dict->l);
+    addChar(str,'#');
   }
   if (dict->v != NULL) {
     addChar(str,'(');
@@ -103,6 +104,9 @@ struct Node *parse(FILE *f, char peek) {
   if (peek == ')') {
     return NULL;
   }
+  if (peek == '}') {
+    return NULL;
+  }
   if (peek == '$') {
     n->isWord = 1;
     peek = getNext(f);
@@ -115,6 +119,13 @@ struct Node *parse(FILE *f, char peek) {
   if (peek == '(') {
     n->v = parse(f,getNext(f));
     peek = getNext(f);
+  }
+  if (peek == '{') {
+    n->u = parse(f,getNext(f));
+    peek = getNext(f);
+  }
+  if (peek == '#') {
+    
   }
   if (isalpha(peek) || peek == '$') {
     n->h = parse(f,peek);
