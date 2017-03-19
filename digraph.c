@@ -31,19 +31,24 @@ void addNodeChar(struct Str *str, struct Node *n) {
 };
 
 struct Str*recurSerialize(struct Str *str, struct Node *dict) {
-  addChar(str,'(');
   addNodeChar(str,dict);
+  if (dict->u != NULL) {
+    addChar(str,'{');
+    recurSerialize(str,dict->u);
+    addChar(str,'}');
+  }
+  if (dict->l != NULL) {
+    addChar(str,'#');
+    recurSerialize(str,dict->l);
+  }
   if (dict->v != NULL) {
+    addChar(str,'(');
     recurSerialize(str,dict->v);
+    addChar(str,')');
   }
-  while (dict->h != NULL) {
-    dict = dict->h;
-    addNodeChar(str,dict);
-    if (dict->v != NULL) {
-      recurSerialize(str,dict->v);
-    }
+  if (dict->h != NULL) {
+    recurSerialize(str,dict->h);
   }
-  addChar(str,')');
   return str;
 }
 
