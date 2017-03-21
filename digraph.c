@@ -141,7 +141,6 @@ struct Node *parse(FILE *f, char peek) {
   if (isalpha(peek) || peek == '$') {
     n->h = parse(f,peek);
   }
-  fprintf(stderr,"hi:%c\n",peek);
   return base;
 };
 
