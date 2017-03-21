@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "dict.h"
+#include "eval.h"
 
 struct StrContainer {
   struct Str *l;
