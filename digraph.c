@@ -11,13 +11,20 @@ struct Str *initStr() {
   return s;
 }
 
+void addTerminalChar(struct Str *str) {
+  char c = '\0';
+  str->c[str->len-1] = c;
+  str->len++;
+  str->c = realloc(str->c, sizeof(char)*str->len);
+};
+
 char *getStr(struct Str *str) {
-  addChar(str,'\0');
+  addTerminalChar(str);
   return str->c;
 };
 
 int isValidChar(char c) { 
-  return !(c!='\0' && c!='[' && c!=']' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
+  return !(c!='[' && c!=']' && c!= ')' && c != '(' && c != '$' && c != '{' && c != '}');
 };
 
 void addChar(struct Str *str, char c) {
