@@ -22,9 +22,10 @@ void addStr(struct Str *s, struct StrContainer *sc) {
 };
 
 // define prototype for mutual recursion
-void walkHorizontal(struct Node *g, struct StrContainer *s);
+void walkHorizontal(struct Node *g, struct StrContainer *s, int recurred);
 
 void walkVertical(struct Node *g, struct StrContainer *strContainer) {
+  fprintf(stderr,"enter vertical:%c\n",g->c);
   // remember where we started from
   struct Node *initNodeAddr = g;
   // walk as far up as possible
@@ -36,18 +37,19 @@ void walkVertical(struct Node *g, struct StrContainer *strContainer) {
     addChar(s,g->c);
     if (g != initNodeAddr) {
       if (g->h != NULL || g->l != NULL) {
-        walkHorizontal(g,strContainer);
+        fprintf(stderr,"calling:%c\n",g->c);
+        walkHorizontal(g,strContainer,1);
       }
     }
+    g = g->v;
   }
-  g = g->v;
   addStr(s,strContainer);
 };
 
 struct StrContainer *walk (struct Node *g) {
   struct StrContainer *s = initStrContainer();
   if (g->h != NULL) {
-    walkHorizontal(g,s);
+    walkHorizontal(g,s,0);
   }
   else {
     walkVertical(g,s);
@@ -55,7 +57,8 @@ struct StrContainer *walk (struct Node *g) {
   return s;
 };
 
-void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
+void walkHorizontal(struct Node *g, struct StrContainer *strContainer, int recurred) {
+  fprintf(stderr,"enter horizontal:%c\n",g->c);
   struct Node *initNodeAddr = g;
   // walk as far left as possible
   while (g->l != NULL) {
@@ -63,11 +66,14 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
   }
   struct Str * s = initStr(); 
   while (g!= NULL) {
-    addChar(s,g->c);
-    if (g != initNodeAddr) {
+    if (g != initNodeAddr || !recurred) {
+      recurred = 1;
       if (g->u != NULL || g->v != NULL) {
         walkVertical(g,strContainer);
       }
+    }
+    else {
+      addChar(s,g->c);
     }
     g = g->h;
   }
@@ -77,13 +83,19 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer) {
 int eval(struct Node *g, struct Node *dict) {
   struct StrContainer *s = walk(g);
   int i,ii;
+  int v= 1;
   for (i=0,ii=s->size;i<ii;i++) {
     struct Str *w = &s->l[i];
-    if (!isWord(dict,w->c)) {
-      return 0;
+    char *str = getStr(w);
+    if (!isWord(dict,str)) {
+      v=0;
+      fprintf(stderr,"%s is not a word\n",str);
+    }
+    else {
+      fprintf(stderr,"%s is a word\n",str);
     }
   }
-  return 1;
+  return v;
 };
 
 int correct(struct Node *g, struct Node *dict) {

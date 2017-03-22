@@ -151,6 +151,27 @@ struct Node *parse(FILE *f, char peek) {
   return base;
 };
 
+void doubleLink (struct Node *g) { 
+  if (g->u != NULL && g->u->v == NULL) {
+    g->u->v = g;
+    fprintf(stderr,"ok:%c\n",g->u->c);
+    doubleLink(g->u);
+  }
+  if (g->v != NULL && g->v->u == NULL) {
+    fprintf(stderr,"ook:%c\n",g->v->c);
+    g->v->u = g;
+    doubleLink(g->v);
+  }
+  if (g->l != NULL && g->l->h == NULL) {
+    g->l->h = g;
+    doubleLink(g->l);
+  }
+  if (g->h != NULL && g->h->l == NULL) {
+    g->h->l = g;
+    doubleLink(g->h);
+  }
+};
+
 struct Node *deserialize(FILE *f) {
   //(a b c)
   // a b c)

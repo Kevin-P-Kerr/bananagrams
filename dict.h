@@ -17,6 +17,8 @@ struct Str {
 // function prototypes
 struct Str *initStr (void);
 
+void doubleLink(struct Node *g);
+
 void addChar(struct Str *str, char c);
 
 struct Str *recurSerialize(struct Str *str, struct Node* dict);

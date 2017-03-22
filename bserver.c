@@ -17,5 +17,6 @@ struct Node * getDict() {
 int main(void) {
   FILE *f = fopen("sample.bana","r");
   struct Node* n = deserialize(f);
+  doubleLink(n);
   return correct(n,getDict());
 }
