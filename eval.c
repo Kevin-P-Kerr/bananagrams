@@ -50,12 +50,15 @@ struct StrContainer *walk (struct Node *g) {
     walkHorizontal(g,s,0);
   }
   else {
+    fprintf(stderr,"ho! %c\n",g->c);
     walkVertical(g,s);
   }
   return s;
 };
 
+int level_db = 0;
 void walkHorizontal(struct Node *g, struct StrContainer *strContainer, int recurred) {
+  level_db++;
   struct Node *initNodeAddr = g;
   // walk as far left as possible
   while (g->l != NULL) {
@@ -68,11 +71,15 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer, int recur
       if (g->u != NULL || g->v != NULL) {
         walkVertical(g,strContainer);
       }
-      //addChar(s,g->c);
     }
+    if (level_db ==1) {
+      fprintf(stderr,"%c\n",g->c);
+    }
+    addChar(s,g->c);
     g = g->h;
   }
   addStr(s,strContainer);
+  level_db--;
 };
 
 int eval(struct Node *g, struct Node *dict) {
