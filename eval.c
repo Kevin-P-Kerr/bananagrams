@@ -86,7 +86,8 @@ int eval(struct Node *g, struct Node *dict) {
   struct StrContainer *s = walk(g);
   int i,ii;
   int v= 1;
-  for (i=0,ii=s->size;i<ii;i++) {
+  ii = s->size-1;
+  for (i=0;i<ii;i++) {
     struct Str *w = &s->l[i];
     char *str = getStr(w);
     if (!isWord(dict,str)) {
@@ -97,6 +98,7 @@ int eval(struct Node *g, struct Node *dict) {
       fprintf(stderr,"%s is a word\n",str);
     }
   }
+  fprintf(stderr,"done\n");
   return v;
 };
 
