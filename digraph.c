@@ -154,11 +154,9 @@ struct Node *parse(FILE *f, char peek) {
 void doubleLink (struct Node *g) { 
   if (g->u != NULL && g->u->v == NULL) {
     g->u->v = g;
-    fprintf(stderr,"ok:%c\n",g->u->c);
     doubleLink(g->u);
   }
   if (g->v != NULL && g->v->u == NULL) {
-    fprintf(stderr,"ook:%c\n",g->v->c);
     g->v->u = g;
     doubleLink(g->v);
   }

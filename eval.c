@@ -25,7 +25,6 @@ void addStr(struct Str *s, struct StrContainer *sc) {
 void walkHorizontal(struct Node *g, struct StrContainer *s, int recurred);
 
 void walkVertical(struct Node *g, struct StrContainer *strContainer) {
-  fprintf(stderr,"enter vertical:%c\n",g->c);
   // remember where we started from
   struct Node *initNodeAddr = g;
   // walk as far up as possible
@@ -37,7 +36,6 @@ void walkVertical(struct Node *g, struct StrContainer *strContainer) {
     addChar(s,g->c);
     if (g != initNodeAddr) {
       if (g->h != NULL || g->l != NULL) {
-        fprintf(stderr,"calling:%c\n",g->c);
         walkHorizontal(g,strContainer,1);
       }
     }
@@ -58,7 +56,6 @@ struct StrContainer *walk (struct Node *g) {
 };
 
 void walkHorizontal(struct Node *g, struct StrContainer *strContainer, int recurred) {
-  fprintf(stderr,"enter horizontal:%c\n",g->c);
   struct Node *initNodeAddr = g;
   // walk as far left as possible
   while (g->l != NULL) {
@@ -71,9 +68,7 @@ void walkHorizontal(struct Node *g, struct StrContainer *strContainer, int recur
       if (g->u != NULL || g->v != NULL) {
         walkVertical(g,strContainer);
       }
-    }
-    else {
-      addChar(s,g->c);
+      //addChar(s,g->c);
     }
     g = g->h;
   }
